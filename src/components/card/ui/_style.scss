@@ -1,0 +1,97 @@
+@use '@/app/styles/varibles.scss' as *;
+
+.base {
+  &__card {
+    max-height: fit-content;
+    min-width: 300px;
+    border-radius: 15px;
+    padding: 15px;
+    border: 1px solid $light-gray;
+    background-color: $white;
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      &__title {
+        font-size: 20px;
+        text-transform: capitalize;
+        font-weight: 400;
+
+        @media (max-width: 600px) {
+          font-size: 18px;
+        }
+
+        @media (max-width: 400px) {
+          font-size: 16px;
+        }
+      }
+
+      &__tag {
+        color: $dark-gray;
+        text-transform: capitalize;
+        border: 1px solid $light-gray;
+        border-radius: 20px;
+        padding: 10px 15px;
+        transition:
+          background-color 0.25s ease,
+          border-color 0.25s ease,
+          transform 0.08s ease;
+
+        &:hover {
+          color: $dark-blue;
+        }
+
+        @media (max-width: 600px) {
+          font-size: 14px;
+          padding: 8px 12px;
+        }
+
+        @media (max-width: 400px) {
+          font-size: 12px;
+          padding: 6px 10px;
+        }
+      }
+    }
+
+    &-link {
+      width: 50px;
+      height: 50px;
+
+      @media (max-width: 600px) {
+        width: 40px;
+        height: 40px;
+      }
+
+      @media (max-width: 400px) {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    &-footer {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      margin-top: 12px;
+      column-gap: 6px;
+
+      &__block {
+        &-label {
+          text-transform: capitalize;
+          font-size: 12px;
+          margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+          font-size: 14px;
+        }
+
+        @media (max-width: 400px) {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

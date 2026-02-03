@@ -1,0 +1,65 @@
+@use '@/app/styles/varibles.scss' as *;
+
+.sidebar {
+  &__navigation-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid $light-gray;
+    background-color: transparent;
+    border-radius: 50%;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.08s ease;
+
+    &--exact-active {
+      background-color: $dark-blue;
+      border: 1px solid $dark-blue;
+
+      .sidebar__navigation-icon {
+        color: $white;
+      }
+    }
+
+    &:hover {
+      background-color: $dark-blue;
+      border: 1px solid $dark-blue;
+
+      .sidebar__navigation-icon {
+        color: $white;
+      }
+    }
+
+    @media (max-width: 600px) {
+      width: 50px;
+      height: 50px;
+    }
+
+    @media (max-width: 400px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__navigation-icon {
+    width: 24px;
+    height: 24px;
+    color: $dark-gray;
+    transition: color 0.25s ease;
+
+    @media (max-width: 600px) {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 400px) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

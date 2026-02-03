@@ -1,0 +1,38 @@
+@use '@/app/styles/varibles.scss' as *;
+
+.wrapper {
+  &__applications {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, max-content));
+    grid-auto-rows: min-content;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+    gap: 20px;
+  }
+  .base {
+    &__card {
+      &-content {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 5px;
+        height: 100px;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid $light-gray;
+        border-radius: 20px;
+        padding: 0 15px;
+
+        @media (max-width: 600px) {
+          height: 80px;
+        }
+
+        &__text {
+          @media (max-width: 600px) {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}

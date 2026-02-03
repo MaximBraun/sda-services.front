@@ -1,0 +1,16 @@
+.wrapper {
+  &__services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, max-content));
+    grid-auto-rows: min-content;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+    gap: 20px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}

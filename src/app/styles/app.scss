@@ -1,0 +1,37 @@
+@use './varibles.scss' as *;
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/app/assets/fonts/Montserrat.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Jost';
+  src: url('@/app/assets/fonts/Jost.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Jost';
+  src: url('@/app/assets/fonts/Rubik.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after,
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}

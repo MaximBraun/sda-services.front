@@ -1,0 +1,41 @@
+@use '@/app/styles/varibles.scss' as *;
+
+.wrapper {
+  min-height: 100vh;
+  padding: 25px;
+  background-color: $regular-white;
+  display: grid;
+  grid-template-columns: auto 1fr;
+
+  // планшеты
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+
+  // мобилки
+  @media (max-width: 600px) {
+    padding: 15px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto; // контент сверху, sidebar снизу
+  }
+
+  @media (max-width: 400px) {
+    padding: 10px;
+  }
+}
+
+/* sidebar */
+.wrapper > :first-child {
+  @media (max-width: 600px) {
+    grid-row: 2; // отправляем сайдбар в нижнюю строку
+    justify-self: center; // по центру по горизонтали
+    align-self: end; // прижать к низу wrapper
+  }
+}
+
+/* content */
+.wrapper > :nth-child(2) {
+  @media (max-width: 600px) {
+    grid-row: 1; // контент остаётся сверху
+  }
+}
