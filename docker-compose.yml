@@ -1,0 +1,18 @@
+services:
+  frontend:
+    container_name: sda-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+      # URL бэкенда для проксирования API запросов
+      # По умолчанию используется продакшн сервер
+      # Для локальной разработки создайте .env файл с API_BACKEND_URL=http://host.docker.internal:8001
+      - API_BACKEND_URL=${API_BACKEND_URL:-https://trust.coreapis.space}
+      # Host header для SSL (должен совпадать с доменом в сертификате)
+      - API_BACKEND_HOST=${API_BACKEND_HOST:-trust.coreapis.space}
+    restart: unless-stopped
+

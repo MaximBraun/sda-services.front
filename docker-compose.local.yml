@@ -1,0 +1,15 @@
+# Docker Compose override для локальной разработки
+# Использование: docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+
+services:
+  frontend:
+    environment:
+      # Для локального тестирования с бэкендом на хосте
+      # Если бэкенды запущены локально на портах 8001, 8002 и т.д.
+      # Используйте host.docker.internal для доступа к хосту из контейнера
+      - API_BACKEND_URL=http://host.docker.internal
+      # Host header для локального бэкенда (обычно localhost)
+      - API_BACKEND_HOST=localhost
+      # Или если у вас локальный nginx проксирует на бэкенды:
+      # - API_BACKEND_URL=http://host.docker.internal:80
+      # - API_BACKEND_HOST=localhost
