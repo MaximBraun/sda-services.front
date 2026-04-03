@@ -10,6 +10,8 @@ const props = defineProps<{
   visible: boolean
   headers: string[]
   row?: TableRow
+  /** Если задано, Save ждёт промис и при ошибке не закрывает окно. */
+  persist?: (row: TableRow) => void | Promise<void>
 }>()
 
 const emit = defineEmits<{
@@ -17,20 +19,52 @@ const emit = defineEmits<{
   (e: 'save', row: TableRow): void
 }>()
 
+function coerceIsActive(raw: unknown): boolean {
+  if (typeof raw === 'boolean') return raw
+  if (typeof raw === 'number') return raw !== 0
+  if (typeof raw === 'string') {
+    const s = raw.toLowerCase().trim()
+    if (['true', '1', 'yes'].includes(s)) return true
+    if (['false', '0', 'no'].includes(s)) return false
+  }
+  return Boolean(raw)
+}
+
 const formData = ref<TableRow>({})
+
+const persistError = ref<string | null>(null)
+const savePending = ref(false)
 
 watch(
   () => props.row,
   (newRow) => {
     if (newRow) {
-      formData.value = { ...newRow }
+      const copy: TableRow = { ...newRow }
+      if (Object.prototype.hasOwnProperty.call(copy, 'is_active')) {
+        copy.is_active = coerceIsActive(copy.is_active)
+      }
+      formData.value = copy
+      persistError.value = null
       nextTick(() => autoResizeAll())
     }
   },
   { immediate: true },
 )
 
-function handleSave() {
+async function handleSave() {
+  persistError.value = null
+  if (props.persist) {
+    savePending.value = true
+    try {
+      await props.persist(formData.value)
+      emit('close')
+    } catch (e) {
+      persistError.value = e instanceof Error ? e.message : String(e)
+    } finally {
+      savePending.value = false
+    }
+    return
+  }
   emit('save', formData.value)
   emit('close')
 }
@@ -59,6 +93,8 @@ function autoResizeAll() {
         <div class="modal__content">
           <h2 class="modal__title">Edit Data</h2>
 
+          <p v-if="persistError" class="modal__error">{{ persistError }}</p>
+
           <div class="modal__form">
             <div
               v-for="(value, key) in formData"
@@ -68,7 +104,17 @@ function autoResizeAll() {
             >
               <label class="modal__label">{{ key }}</label>
 
+              <select
+                v-if="key === 'is_active'"
+                v-model="formData[key]"
+                class="modal__select"
+              >
+                <option :value="true">true (вкл.)</option>
+                <option :value="false">false (выкл.)</option>
+              </select>
+
               <textarea
+                v-else
                 v-model="formData[key]"
                 class="modal__textarea"
                 :rows="1"
@@ -87,10 +133,11 @@ function autoResizeAll() {
             </ButtonComponent>
             <ButtonComponent
               type="button"
+              :disabled="savePending"
               @click="handleSave"
               class="save-button"
             >
-              Save
+              {{ savePending ? '…' : 'Save' }}
             </ButtonComponent>
           </div>
         </div>
@@ -151,6 +198,24 @@ function autoResizeAll() {
   font-weight: 600;
   text-transform: capitalize;
   color: #555;
+}
+
+.modal__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.modal__select {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
 }
 
 .modal__textarea {

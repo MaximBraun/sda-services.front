@@ -8,6 +8,8 @@ import { TableRowItem } from '@/shared/types/interface'
 const props = defineProps<{
   data: TableRowItem[]
   exclude?: string[]
+  /** Если задано, Save в модалке ждёт этот запрос и закрывается только после успеха. */
+  onSaveRow?: (row: Record<string, unknown>) => void | Promise<void>
 }>()
 
 const headers = computed(() => {
@@ -35,6 +37,7 @@ const fullImage = ref<string | null>(null)
 function openFull(src: string) {
   fullImage.value = src
 }
+
 </script>
 
 <template>
@@ -71,8 +74,8 @@ function openFull(src: string) {
       :visible="modalOpen"
       :headers="headers"
       :row="selectedRow || undefined"
+      :persist="onSaveRow"
       @close="modalOpen = false"
-      @save="(updatedRow) => console.log('Сохраняем:', updatedRow)"
     />
   </div>
 </template>
