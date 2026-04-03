@@ -1,5 +1,27 @@
 import { HttpMethods, HTTPMethodSet, RequestBody, Query } from '../types'
 
+function formatHttpErrorDetail(detail: unknown): string {
+  if (detail == null) return 'Unknown error'
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item) => {
+        if (item != null && typeof item === 'object' && 'msg' in item) {
+          const o = item as { loc?: unknown[]; msg?: string }
+          const where =
+            Array.isArray(o.loc) && o.loc.length
+              ? `${o.loc.filter((x) => x !== 'body').join('.')}: `
+              : ''
+          return `${where}${o.msg ?? JSON.stringify(item)}`
+        }
+        return typeof item === 'string' ? item : JSON.stringify(item)
+      })
+      .join('; ')
+  }
+  if (typeof detail === 'object') return JSON.stringify(detail)
+  return String(detail)
+}
+
 export abstract class IHttpClient {
   protected url: string
   protected headers?: Record<string, string>
@@ -48,9 +70,8 @@ export abstract class IHttpClient {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      throw new Error(
-        `HTTP ${response.status}: ${errorData?.detail || 'Unknown error'}`,
-      )
+      const detail = formatHttpErrorDetail(errorData?.detail)
+      throw new Error(`HTTP ${response.status}: ${detail}`)
     }
 
     return response.json() as Promise<T>
