@@ -3,9 +3,11 @@ FROM node:22-alpine AS build
 
 WORKDIR /app
 
-# Устанавливаем зависимости
-COPY package*.json ./
-RUN npm ci --omit=dev=false
+# Устанавливаем зависимости (включая dev — нужны для Vite).
+# npm install переживает рассинхрон package-lock.json с package.json; после правок
+# зависимостей локально выполните `npm install` и закоммитьте обновлённый lock.
+COPY package.json package-lock.json ./
+RUN npm install --no-audit --no-fund
 
 # Копируем исходники и собираем
 COPY . .
